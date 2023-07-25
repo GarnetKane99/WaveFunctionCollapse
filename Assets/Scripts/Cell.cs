@@ -6,7 +6,6 @@ public class Cell : MonoBehaviour
 {
     public bool collapsed;
     public Tile[] tileOptions;
-    public bool alreadyCollapsed;
 
     public void CreateCell(bool collapseState, Tile[] tiles)
     {

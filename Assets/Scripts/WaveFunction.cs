@@ -124,7 +124,7 @@ public class WaveFunction : MonoBehaviour
                     //update right
                     if (x < dimensions - 1)
                     {
-                        Cell right = gridComponents[x + 1 + y * dimensions].GetComponent<Cell>();
+                        Cell right = gridComponents[x + 1 + y * dimensions];
                         List<Tile> validOptions = new List<Tile>();
 
                         foreach (Tile possibleOptions in right.tileOptions)
@@ -141,7 +141,7 @@ public class WaveFunction : MonoBehaviour
                     //look down
                     if (y < dimensions - 1)
                     {
-                        Cell down = gridComponents[x + (y + 1) * dimensions].GetComponent<Cell>();
+                        Cell down = gridComponents[x + (y + 1) * dimensions];
                         List<Tile> validOptions = new List<Tile>();
 
                         foreach (Tile possibleOptions in down.tileOptions)
@@ -158,7 +158,7 @@ public class WaveFunction : MonoBehaviour
                     //look left
                     if (x > 0)
                     {
-                        Cell left = gridComponents[x - 1 + y * dimensions].GetComponent<Cell>();
+                        Cell left = gridComponents[x - 1 + y * dimensions];
                         List<Tile> validOptions = new List<Tile>();
 
                         foreach (Tile possibleOptions in left.tileOptions)
