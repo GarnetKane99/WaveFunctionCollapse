@@ -12,6 +12,8 @@ public class WaveFunction : MonoBehaviour
     public List<Cell> gridComponents;
     public Cell cellObj;
 
+    int iterations = 0;
+
     void Awake()
     {
         gridComponents = new List<Cell>();
@@ -30,11 +32,11 @@ public class WaveFunction : MonoBehaviour
             }
         }
 
-        CheckEntropy();
+        StartCoroutine(CheckEntropy());
     }
 
 
-    void CheckEntropy()
+    IEnumerator CheckEntropy()
     {
         List<Cell> tempGrid = new List<Cell>(gridComponents);
 
@@ -59,6 +61,8 @@ public class WaveFunction : MonoBehaviour
             tempGrid.RemoveRange(stopIndex, tempGrid.Count - stopIndex);
         }
 
+        yield return new WaitForSeconds(0.01f);
+
         CollapseCell(tempGrid);
     }
 
@@ -72,20 +76,8 @@ public class WaveFunction : MonoBehaviour
         Tile selectedTile = cellToCollapse.tileOptions[UnityEngine.Random.Range(0, cellToCollapse.tileOptions.Length)];
         cellToCollapse.tileOptions = new Tile[] { selectedTile };
 
-        for (int y = 0; y < dimensions; y++)
-        {
-            for (int x = 0; x < dimensions; x++)
-            {
-                Cell tempCell = gridComponents[x + y * dimensions];
-
-                if (tempCell.GetComponent<Cell>().collapsed && !tempCell.GetComponent<Cell>().alreadyCollapsed)
-                {
-                    Tile foundOptions = tempCell.GetComponent<Cell>().tileOptions[0];
-                    Tile newTile = Instantiate(foundOptions, new Vector2(x, y), Quaternion.identity);
-                    tempCell.GetComponent<Cell>().alreadyCollapsed = true;
-                }
-            }
-        }
+        Tile foundTile = cellToCollapse.tileOptions[0];
+        Instantiate(foundTile, cellToCollapse.transform.position, Quaternion.identity);
 
         UpdateGeneration();
     }
@@ -193,6 +185,12 @@ public class WaveFunction : MonoBehaviour
         }
 
         gridComponents = newGenerationCell;
+        iterations++;
+
+        if(iterations < dimensions * dimensions)
+        {
+            StartCoroutine(CheckEntropy());
+        }
 
     }
 
@@ -205,14 +203,6 @@ public class WaveFunction : MonoBehaviour
             {
                 optionList.RemoveAt(x);
             }
-        }
-    }
-
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.Space))
-        {
-            CheckEntropy();
         }
     }
 }
